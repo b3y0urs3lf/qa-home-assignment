@@ -1,0 +1,28 @@
+services:
+  cardvalidation-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./reports:/app/wwwroot/reports
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+
+  test-runner:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    volumes:
+      - .:/src
+      - ./reports:/src/reports
+    working_dir: /src
+    command: >
+      bash -c "dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.0 &&
+               export PATH=\"$PATH:/root/.dotnet/tools\" &&
+               chmod +x ./run-tests.sh &&
+               ./run-tests.sh"
+    depends_on:
+      - cardvalidation-app
+    environment:
+      - API_BASE_URL=http://cardvalidation-app:8080
