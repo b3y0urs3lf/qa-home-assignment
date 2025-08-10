@@ -32,3 +32,31 @@ API should return all validation errors in case of failure.
 1. Fork the repository
 2. Clone the repository on your local machine 
 3. Compile and Run application Visual Studio 2022.
+
+
+# What was done:
+1. Added unit tests 
+2. Added integration tests using BDD framework Reqnroll
+3. Created pipeline where tests executed and coverage report created in the end:
+```
+test-runner-1         | To view the report, open the following URL in your browser:
+test-runner-1         | Coverage Report:      http://localhost:8080/reports/coverage/index.html
+```
+
+# How to run
+- To run execute ```docker compose -up build```
+- To close everything Ctrl+C ```docker compose down -v```
+- To execute tests go to from your terminal to  ```cd CardValidation.Tests``` , and then using tags i.e:
+ ```
+ dotnet test --filter "Category=e2e"
+ dotnet test --filter "Category=e2e&Category=ownerNegativeCases
+ dotnet test --filter "Category=e2e&Category=ownerPositiveCases"
+dotnet test --filter "Category=in-memory&Category=ownerPositiveCases"
+dotnet test --filter "Category=in-memory&Category=ownerNegativeCases"
+dotnet test --filter "Category=in-memory&Category=ccvPositiveeCases"
+ dotnet test --filter "Category=in-memory&Category=ccvPositiveCases"
+ ```
+- If you want to generate coverage report then:
+ ```
+dotnet test --settings ../coverlet.runsettings and then from main directory reportgenerator -reports:CardValidation.Tests/TestResults/**/coverage.opencover.xml -targetdir:coveragereport -reporttypes:Html
+ ```
